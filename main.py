@@ -21,8 +21,11 @@ async def on_ready():
 #Say command
 @bot.command(name='say', brief=' Make Sofie say anything!')
 async def say(ctx, *, text):
-    await ctx.send(text)
     await ctx.message.delete()
+    async with ctx.typing():
+        await asyncio.sleep(2)
+        await ctx.send(text)
+    
 
 #Dice roll command
 @bot.command(name='dice', brief=' Roll a dice')
@@ -30,7 +33,9 @@ async def dice(ctx):
     dice_numbers = ["1", "2", "3", "4", "5", "6"]
     author = ctx.author
     roll = random.choice(dice_numbers)
-    await ctx.send(f"{author} rolled a {roll}")
+    async with ctx.typing():
+        await asyncio.sleep(0.5)
+        await ctx.send(f"{author} rolled a {roll}")
 
 #User avatar command
 @bot.command(name='useravatar', brief=" Get a member's avatar or your own", description='(Mentioning a member is optional)')
@@ -38,7 +43,9 @@ async def useravatar(ctx, *, member: discord.Member=None):
     member = ctx.author if not member else member
     avatar_embed = discord.Embed(title=member.name)
     avatar_embed.set_image(url=member.avatar)
-    await ctx.send(embed = avatar_embed)
+    async with ctx.typing():
+        await asyncio.sleep(0.5)
+        await ctx.send(embed = avatar_embed)
 
 #User info command (Soon)
 @bot.command(name='userinfo', brief=' Get information of a member or your own', description='(Mentioning a member is optional)')
@@ -52,7 +59,9 @@ async def userinfo(ctx, *, member: discord.Member=None):
     info_embed.add_field(name='ID:', value=member.id, inline=False)
     info_embed.add_field(name='Created At:', value=member.created_at, inline=False)
     info_embed.add_field(name='Joined Server At:', value=member.joined_at, inline=False)
-    await ctx.send(embed = info_embed)
+    async with ctx.typing():
+        await asyncio.sleep(3)
+        await ctx.send(embed = info_embed)
 
 #Purge command (Admin)
 @bot.command(name='purge', brief=' Delete messages in a channel')
@@ -82,21 +91,27 @@ async def ban(ctx, member: discord.Member, *, reason: str):
 @commands.has_permissions(administrator=True)
 async def nickname(ctx, member: discord.Member, *, name):
     await member.edit(nick=name)
-    await ctx.send(f"Nickname of {member.mention} was changed to {name}")
+    async with ctx.typing():
+        await asyncio.sleep(1)
+        await ctx.send(f"Nickname of {member.mention} was changed to {name}")
 
 #Add role command
 @bot.command(name='addrole', brief=' Give a role to a member')
 @commands.has_permissions(administrator=True)
 async def giverole(ctx, member: discord.Member, *, role: discord.Role):
     await member.add_roles(role)
-    await ctx.send(f"Added the role {role.mention} to {member.mention}!")
+    async with ctx.typing():
+        await asyncio.sleep(1)
+        await ctx.send(f"Added the role {role.mention} to {member.mention}!")
 
 #Delete role command
 @bot.command(name='delrole', brief=' Remove a role from a member')
 @commands.has_permissions(administrator=True)
 async def removerole(ctx, member: discord.Member, *, role: discord.Role):
     await member.remove_roles(role)
-    await ctx.send(f"Removed the role {role.mention} from {member.mention}")
+    async with ctx.typing():
+        await asyncio.sleep(1)
+        await ctx.send(f"Removed the role {role.mention} from {member.mention}")
 
 #Punch command
 @bot.command(name='punch', brief=' Punch someone')
