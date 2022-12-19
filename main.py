@@ -3,7 +3,7 @@ import os
 import asyncio
 import random
 from dotenv import load_dotenv
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.members=True
 intents.message_content=True
 intents.presences=True
@@ -11,6 +11,9 @@ intents.presences=True
 #Adding bot prefix
 from discord.ext import commands
 bot = commands.Bot(command_prefix='$', intents=intents)
+
+#Declaring guild
+guild = discord.Guild
 
 #Adding bot status
 @bot.event
@@ -25,8 +28,20 @@ async def say(ctx, *, text):
     async with ctx.typing():
         await asyncio.sleep(2)
         await ctx.send(text)
-    
 
+#Server stats command
+@bot.command(name='serverstats', brief=' Shows server statistics')
+async def serverstats(ctx):
+    stats_embed = discord.Embed(title="Server Statistics", colour=discord.Colour.random())
+    stats_embed.add_field(name='Name:', value=ctx.guild.name, inline=False)
+    stats_embed.add_field(name='Owner:', value=ctx.guild.owner, inline=False)
+    stats_embed.add_field(name='Server Created Date:', value=ctx.guild.created_at, inline=False)
+    stats_embed.add_field(name='Member Count:', value=ctx.guild.member_count, inline=False)
+    stats_embed.set_thumbnail(url=ctx.guild.icon)
+    async with ctx.typing():
+        await asyncio.sleep(1)
+        await ctx.send(embed=stats_embed)
+    
 #Dice roll command
 @bot.command(name='dice', brief=' Roll a dice')
 async def dice(ctx):
@@ -57,8 +72,8 @@ async def userinfo(ctx, *, member: discord.Member=None):
     info_embed.add_field(name='Name:', value=member.name, inline=False)
     info_embed.add_field(name='Nickname:', value=member.nick, inline=False)
     info_embed.add_field(name='ID:', value=member.id, inline=False)
-    info_embed.add_field(name='Created At:', value=member.created_at, inline=False)
-    info_embed.add_field(name='Joined Server At:', value=member.joined_at, inline=False)
+    info_embed.add_field(name='Account Created Date:', value=member.created_at, inline=False)
+    info_embed.add_field(name='Joined Server Date:', value=member.joined_at, inline=False)
     async with ctx.typing():
         await asyncio.sleep(3)
         await ctx.send(embed = info_embed)
