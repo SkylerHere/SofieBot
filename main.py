@@ -21,6 +21,21 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name="$help"))
     print("Bot {0.user} is running...".format(bot))
 
+#Give verified role to a member/verify a member command
+@bot.command('verify', brief=' Make a member verified')
+@commands.has_permissions(manage_roles=True)
+async def verify(ctx, member: discord.Member):
+    if discord.utils.get(ctx.guild.roles, name = 'Verified'):
+        role = discord.utils.get(ctx.guild.roles, name = 'Verified')
+        await member.add_roles(role)
+    else:
+        await ctx.guild.create_role(name = 'Verified', color = discord.Colour(0x2ecc71))
+        role = discord.utils.get(ctx.guild.roles, name = 'Verified')
+        await member.add_roles(role)
+    async with ctx.typing():
+        await asyncio.sleep(0.6)
+        await ctx.send(f"Member {member.mention} has been verified!")
+
 #Say command
 @bot.command(name='say', brief=' Make Sofie say anything!')
 async def say(ctx, *, text):
