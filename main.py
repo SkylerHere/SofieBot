@@ -25,16 +25,21 @@ async def on_ready():
 @bot.command('verify', brief=' Make a member verified')
 @commands.has_permissions(manage_roles=True)
 async def verify(ctx, member: discord.Member):
-    if discord.utils.get(ctx.guild.roles, name = 'Verified'):
-        role = discord.utils.get(ctx.guild.roles, name = 'Verified')
+    role = discord.utils.get(ctx.guild.roles, name = 'Verified')
+    server = ctx.guild.roles
+    if role in member.roles:
+        msg = f"Member {member.mention} is already verified..."
+    elif role not in member.roles and role in server:
         await member.add_roles(role)
-    else:
+        msg = f"Member {member.mention} has been verified!"
+    elif role not in member.roles and role not in server:
         await ctx.guild.create_role(name = 'Verified', color = discord.Colour(0x2ecc71))
-        role = discord.utils.get(ctx.guild.roles, name = 'Verified')
-        await member.add_roles(role)
+        created_role = discord.utils.get(ctx.guild.roles, name = 'Verified')
+        await member.add_roles(created_role)
+        msg = f"Member {member.mention} has been verified!"
     async with ctx.typing():
-        await asyncio.sleep(0.6)
-        await ctx.send(f"Member {member.mention} has been verified!")
+        await asyncio.sleep(0.5)
+        await ctx.send(msg)
 
 #Say command
 @bot.command(name='say', brief=' Make Sofie say anything!')
