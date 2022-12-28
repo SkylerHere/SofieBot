@@ -21,6 +21,36 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name="$help"))
     print("Bot {0.user} is running...".format(bot))
 
+#Add coffee reaction
+@bot.event
+async def on_message(msg):
+    if 'coffee' in msg.content:
+        await msg.add_reaction('☕')
+
+    if 'pizza' in msg.content:
+        await msg.add_reaction('🍕')
+
+    if 'love you' in msg.content:
+        await msg.add_reaction('🥰')
+
+    if 'miss you' in msg.content:
+        await msg.add_reaction('❤')
+
+    if 'christmas' in msg.content or 'xmas' in msg.content:
+        await msg.add_reaction('🎄')
+        await msg.add_reaction('🎅')
+        await msg.add_reaction('❄')
+
+    if 'snowman' in msg.content or 'Olaf' in msg.content:
+        await msg.add_reaction('⛄')
+
+    if 'my birthday' in msg.content:
+        await msg.add_reaction('🎉')
+        await msg.add_reaction('🎂')
+
+    if 'Hello' in msg.content or 'Hi' in msg.content:
+        await msg.add_reaction('👋')
+
 #Give verified role to a member/verify a member command
 @bot.command('verify', brief=' Make a member verified')
 @commands.has_permissions(manage_roles=True)
