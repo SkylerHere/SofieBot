@@ -22,8 +22,9 @@ async def on_ready():
     print("Bot {0.user} is running...".format(bot))
 
 #Add message reactions
+#Always add await bot.process_commands(message) at the end of an on_message event
 @bot.event
-async def on_message(msg):
+async def on_message(msg): 
     if 'coffee' in msg.content:
         await msg.add_reaction('☕')
 
@@ -50,6 +51,8 @@ async def on_message(msg):
 
     if 'Hello' in msg.content or 'Hi' in msg.content:
         await msg.add_reaction('👋')
+    
+    await bot.process_commands(msg)
 
 #Give verified role to a member/verify a member command
 @bot.command('verify', brief=' Make a member verified')
