@@ -21,7 +21,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name="$help"))
     print("Bot {0.user} is running...".format(bot))
 
-#Add coffee reaction
+#Add message reactions
 @bot.event
 async def on_message(msg):
     if 'coffee' in msg.content:
