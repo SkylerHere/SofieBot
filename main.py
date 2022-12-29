@@ -198,6 +198,24 @@ async def punch(ctx, member: discord.Member):
     punch_embed.set_thumbnail(url = random_punch)
     await ctx.send(embed = punch_embed)
 
+#Stare command
+@bot.command(name='stare', brief=' Stare at someone')
+async def stare(ctx, member: discord.Member):
+    gif = [
+        "https://media.tenor.com/IwyNIipPItQAAAAd/anime-naruto.gif",
+        "https://media.tenor.com/-htQlAzVwKcAAAAd/anime-blinking.gif",
+        "https://media.tenor.com/1opLl5UEkR4AAAAd/lamy-stare-anime-stare.gif",
+        "https://media.tenor.com/T-N05UVpLLMAAAAd/anime-stare.gif",
+        "https://media.tenor.com/QRVtHWCNVUoAAAAd/hayase-nagatoro-nagatoro-glare.gif",
+        "https://media.tenor.com/W9kzAnY4pQoAAAAd/ram-anime.gif",
+        "https://media.tenor.com/Cq87vzUWaKkAAAAd/scared-stare.gif"
+    ]
+    random_stare = random.choice(gif)
+    author = ctx.author
+    stare_embed = discord.Embed(description=f'{author.name} stares at {member.mention} 😬', colour=discord.Colour.random())
+    stare_embed.set_thumbnail(url = random_stare)
+    await ctx.send(embed = stare_embed)
+
 #Hug command
 @bot.command(name='hug', brief=' Hug someone')
 async def hug(ctx, member: discord.Member):
