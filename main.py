@@ -1,3 +1,4 @@
+#Code by SkylerHere
 import discord
 import os
 import asyncio
