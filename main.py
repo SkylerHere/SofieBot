@@ -11,7 +11,7 @@ intents.presences=True
 
 #Adding bot prefix
 from discord.ext import commands
-bot = commands.Bot(command_prefix='$', intents=intents)
+bot = commands.Bot(command_prefix='++', intents=intents)
 
 #Declaring guild
 guild = discord.Guild
@@ -19,7 +19,7 @@ guild = discord.Guild
 #Adding bot status
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(name="$help"))
+    await bot.change_presence(activity=discord.Game(name="++help"))
     print("Bot {0.user} is running...".format(bot))
 
 #Add message reactions
