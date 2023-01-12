@@ -272,4 +272,8 @@ async def kiss(ctx, member: discord.Member):
 
 #Calling the bot token
 load_dotenv
-bot.run(os.getenv('TOKEN'))
+#bot.run(os.getenv('TOKEN'))
+try:
+    bot.run(os.getenv('TOKEN'))
+except:
+    os.system("kill 1")
