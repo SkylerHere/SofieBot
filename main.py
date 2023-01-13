@@ -58,10 +58,9 @@ async def on_message(msg):
 #Patch Notes Command
 @bot.command(name='patchnotes', brief=' Details about the latest updates of SofieBot')
 async def patchnotes(ctx):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.0', colour=discord.Colour.random())
-    patchnotes_embed.set_thumbnail(url = 'https://media2.giphy.com/media/3mfxH0nbfVFLt1gTpq/giphy.gif?cid=790b7611857a6b662b79914c3c866b5172bc0250bf59f1f1&rid=giphy.gif&ct=g')
-    patchnotes_embed.add_field(name='Patch Notes Command', value='Added this command', inline=False)
-    patchnotes_embed.add_field(name='Mistake On Code', value='Corrected a silly mistake on the code at the verify command', inline=False)
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.1', colour=discord.Colour.random())
+    patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
+    patchnotes_embed.add_field(name='Patch Notes Command Thumbnail', value='Changed the thumbnail of the embed message of this command', inline=False)
     async with ctx.typing():
         await asyncio.sleep(1)
         await ctx.send(embed = patchnotes_embed)
