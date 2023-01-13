@@ -55,8 +55,19 @@ async def on_message(msg):
     
     await bot.process_commands(msg)
 
+#Patch Notes Command
+@bot.command(name='patchnotes', brief=' Details about the latest updates of SofieBot')
+async def patchnotes(ctx):
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.0', colour=discord.Colour.random())
+    patchnotes_embed.set_thumbnail(url = 'https://media2.giphy.com/media/3mfxH0nbfVFLt1gTpq/giphy.gif?cid=790b7611857a6b662b79914c3c866b5172bc0250bf59f1f1&rid=giphy.gif&ct=g')
+    patchnotes_embed.add_field(name='Patch Notes Command', value='Added this command', inline=False)
+    patchnotes_embed.add_field(name='Mistake On Code', value='Corrected a silly mistake on the code at the verify command', inline=False)
+    async with ctx.typing():
+        await asyncio.sleep(1)
+        await ctx.send(embed = patchnotes_embed)
+
 #Give verified role to a member/verify a member command
-@bot.command('verify', brief=' Make a member verified')
+@bot.command(name='verify', brief=' Make a member verified')
 @commands.has_permissions(manage_roles=True)
 async def verify(ctx, member: discord.Member):
     role = discord.utils.get(ctx.guild.roles, name = 'Verified')
