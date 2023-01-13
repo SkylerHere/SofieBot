@@ -58,9 +58,9 @@ async def on_message(msg):
 #Patch Notes Command
 @bot.command(name='patchnotes', brief=' Details about the latest updates of SofieBot')
 async def patchnotes(ctx):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.2', colour=discord.Colour.random())
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.3', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name='Source Code Command', value='Added a command to check the source code', inline=False)
+    patchnotes_embed.add_field(name='Removed Some Code', value='Removed a piece of code that wasnt useful', inline=False)
     async with ctx.typing():
         await asyncio.sleep(1)
         await ctx.send(embed = patchnotes_embed)
@@ -287,9 +287,8 @@ async def kiss(ctx, member: discord.Member):
     kiss_embed.set_thumbnail(url = random_kiss)
     await ctx.send(embed = kiss_embed)
 
-#Calling the bot token
+#Running the bot
 load_dotenv
-#bot.run(os.getenv('TOKEN'))
 try:
     bot.run(os.getenv('TOKEN'))
 except:
