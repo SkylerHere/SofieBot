@@ -3,11 +3,15 @@ import discord
 import os
 import asyncio
 import random
+import json
+import DiscordUtils
 from dotenv import load_dotenv
 intents = discord.Intents.all()
 intents.members=True
 intents.message_content=True
 intents.presences=True
+intents.guilds=True
+intents.messages=True
 
 #Adding bot prefix
 from discord.ext import commands
@@ -58,9 +62,9 @@ async def on_message(msg):
 #Patch Notes Command
 @bot.command(name='patchnotes', brief=' Details about the latest updates of SofieBot')
 async def patchnotes(ctx):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.3', colour=discord.Colour.random())
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.4', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name='Removed Some Code', value='Removed a piece of code that wasnt useful', inline=False)
+    patchnotes_embed.add_field(name='Announcement Command', value='Added a new Announcement command which allows you to create embed announcements in channels of your choice with ease', inline=False)
     async with ctx.typing():
         await asyncio.sleep(1)
         await ctx.send(embed = patchnotes_embed)
@@ -71,6 +75,42 @@ async def source(ctx):
     async with ctx.typing():
         await asyncio.sleep(0.5)
         await ctx.send('https://github.com/SkylerHere/SofieBot')
+
+#Announcement Command
+@bot.command(name='announcement', brief=' Make an announcement in an embed message')
+async def announce(ctx):
+    await ctx.send('Answer The Following Questions (20 mins left)')
+
+    questions = ["Type Title: ", "Type Short Description ", "Type Field Title: ", "Type Field Description: ", "Mention The Channel: "]
+    replies = []
+
+    def check(user):
+        return user.author == ctx.author and user.channel == ctx.channel
+
+    for question in questions:
+        await ctx.send(question)
+
+        try:
+            msg = await bot.wait_for('message', timeout=1200, check=check)
+        except asyncio.TimeoutError:
+            await ctx.send("Ran out of time for the announcement command. Try again!")
+            return
+        else:
+            replies.append(msg.content)
+
+    main_title = replies[0]
+    main_desc = replies[1]
+    field_title = replies[2]
+    field_desc = replies[3]
+
+    channel_id = int(replies[4][2:-1])
+    channel = bot.get_channel(channel_id)      
+
+    announcement = discord.Embed(title = main_title, description = main_desc, colour = discord.Colour.random())
+    announcement.add_field(name = field_title, value = field_desc, inline = False)
+    announcement.set_thumbnail(url = ctx.guild.icon)
+
+    await channel.send(embed = announcement)
 
 #Give verified role to a member/verify a member command
 @bot.command(name='verify', brief=' Make a member verified')
