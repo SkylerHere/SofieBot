@@ -62,9 +62,10 @@ async def on_message(msg):
 #Patch Notes Command
 @bot.command(name='patchnotes', brief=' Details about the latest updates of SofieBot')
 async def patchnotes(ctx):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.4', colour=discord.Colour.random())
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.5', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name='Announcement Command', value='Added a new Announcement command which allows you to create embed announcements in channels of your choice with ease', inline=False)
+    patchnotes_embed.add_field(name="Change Bot's Playing Activity", value='Now you can choose what the bot is playing', inline=False)
+    patchnotes_embed.add_field(name="Change Bot's Status", value="Now you can change the bot's status to: online, idle, don't disturb, & offline", inline=False)
     async with ctx.typing():
         await asyncio.sleep(1)
         await ctx.send(embed = patchnotes_embed)
@@ -76,12 +77,42 @@ async def source(ctx):
         await asyncio.sleep(0.5)
         await ctx.send('https://github.com/SkylerHere/SofieBot')
 
+#Change Bot's Status Command
+@bot.command(name='status', brief=' Change the status of the bot')
+@commands.has_permissions(administrator = True)
+async def status(ctx, statuss: str):
+    if statuss == 'Online' or statuss == 'online':
+        await bot.change_presence(status = discord.Status.online)
+        await ctx.send("I'm online! 🟢")
+    
+    elif statuss == 'Idle' or statuss == 'idle':
+        await bot.change_presence(status = discord.Status.idle)
+        await ctx.send("I'm idle! 🌙")
+
+    elif statuss == 'Disturb' or statuss == 'disturb':
+        await bot.change_presence(status = discord.Status.do_not_disturb)
+        await ctx.send("Do not disturb! ⛔")
+
+    elif statuss == 'Offline' or statuss == 'offline':
+        await ctx.send("I'm going offline... 😔")
+        await bot.change_presence(status = discord.Status.offline)
+
+#Change Bot's Playing Activity Command
+@bot.command(name='playing', brief=' Change the game that the bot is playing')
+@commands.has_permissions(administrator = True)
+async def playing(ctx, *, text: str):
+    bot_game = text
+    await bot.change_presence(activity = discord.Game(name = bot_game))
+    async with ctx.typing():
+        await asyncio.sleep(0.5)
+        await ctx.send(f"Now I'm playing {bot_game}")
+
 #Announcement Command
 @bot.command(name='announcement', brief=' Make an announcement in an embed message')
 async def announce(ctx):
     await ctx.send('Answer The Following Questions (20 mins left)')
 
-    questions = ["Type Title: ", "Type Short Description ", "Type Field Title: ", "Type Field Description: ", "Mention The Channel: "]
+    questions = ["Type Title: ", "Type Short Description: ", "Type Field Title: ", "Type Field Description: ", "Mention The Channel: "]
     replies = []
 
     def check(user):
