@@ -3,8 +3,6 @@ import discord
 import os
 import asyncio
 import random
-import json
-import DiscordUtils
 from dotenv import load_dotenv
 intents = discord.Intents.all()
 intents.members=True
@@ -62,20 +60,12 @@ async def on_message(msg):
 #Patch Notes Command
 @bot.command(name='patchnotes', brief=' Details about the latest updates of SofieBot')
 async def patchnotes(ctx):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.5', colour=discord.Colour.random())
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.6', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name="Change Bot's Playing Activity", value='Now you can choose what the bot is playing', inline=False)
-    patchnotes_embed.add_field(name="Change Bot's Status", value="Now you can change the bot's status to: online, idle, don't disturb, & offline", inline=False)
+    patchnotes_embed.add_field(name="Removed Source Code Command", value='Source code command has now be removed. Reasons of the developer', inline=False)
     async with ctx.typing():
         await asyncio.sleep(1)
         await ctx.send(embed = patchnotes_embed)
-
-#Source Code Command
-@bot.command(name='source', brief=' Get the source code')
-async def source(ctx):
-    async with ctx.typing():
-        await asyncio.sleep(0.5)
-        await ctx.send('https://github.com/SkylerHere/SofieBot')
 
 #Change Bot's Status Command
 @bot.command(name='status', brief=' Change the status of the bot')
