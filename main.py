@@ -3,6 +3,7 @@ import discord
 import os
 import asyncio
 import random
+from discord.ext import commands
 from dotenv import load_dotenv
 intents = discord.Intents.all()
 intents.members=True
@@ -11,21 +12,16 @@ intents.presences=True
 intents.guilds=True
 intents.messages=True
 
-#Adding bot prefix
-from discord.ext import commands
-bot = commands.Bot(command_prefix='++', intents=intents)
+#Declaring Bot
+bot = discord.Bot(intents=intents)
 
-#Declaring guild
-guild = discord.Guild
-
-#Adding bot status
+#Adding Bot Activity
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(name="++help"))
+    await bot.change_presence(activity=discord.Game(name="League Of Legends"))
     print("Bot {0.user} is running...".format(bot))
 
 #Add message reactions
-#Always add await bot.process_commands(message) at the end of an on_message event
 @bot.event
 async def on_message(msg): 
     if 'coffee' in msg.content:
@@ -54,53 +50,47 @@ async def on_message(msg):
 
     if 'Hello' in msg.content or 'Hi' in msg.content:
         await msg.add_reaction('👋')
-    
-    await bot.process_commands(msg)
 
 #Patch Notes Command
-@bot.command(name='patchnotes', brief=' Details about the latest updates of SofieBot')
-async def patchnotes(ctx):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.6', colour=discord.Colour.random())
+@bot.slash_command(name='patchnotes', description='Details about the latest updates of SofieBot')
+async def self(ctx: discord.ApplicationContext):
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.7', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name="Removed Source Code Command", value='Source code command has now be removed. Reasons of the developer', inline=False)
-    async with ctx.typing():
-        await asyncio.sleep(1)
-        await ctx.send(embed = patchnotes_embed)
+    patchnotes_embed.add_field(name="Slash Commands", value='Added slash commands. Removed prefix legacy commands', inline=False)
+    await ctx.respond(embed = patchnotes_embed)
 
 #Change Bot's Status Command
-@bot.command(name='status', brief=' Change the status of the bot')
-@commands.has_permissions(administrator = True)
-async def status(ctx, statuss: str):
-    if statuss == 'Online' or statuss == 'online':
+@bot.slash_command(name='status', description='Change the current status of the bot')
+@commands.has_permissions(administrator=True)
+async def status(ctx: discord.ApplicationContext, status_text: str):
+    if status_text == 'Online' or status_text == 'online':
         await bot.change_presence(status = discord.Status.online)
-        await ctx.send("I'm online! 🟢")
+        await ctx.respond("I'm online! 🟢")
     
-    elif statuss == 'Idle' or statuss == 'idle':
+    elif status_text == 'Idle' or status_text == 'idle':
         await bot.change_presence(status = discord.Status.idle)
-        await ctx.send("I'm idle! 🌙")
+        await ctx.respond("I'm idle! 🌙")
 
-    elif statuss == 'Disturb' or statuss == 'disturb':
+    elif status_text == 'Disturb' or status_text == 'disturb':
         await bot.change_presence(status = discord.Status.do_not_disturb)
-        await ctx.send("Do not disturb! ⛔")
+        await ctx.respond("Do not disturb! ⛔")
 
-    elif statuss == 'Offline' or statuss == 'offline':
-        await ctx.send("I'm going offline... 😔")
+    elif status_text == 'Offline' or status_text == 'offline':
+        await ctx.respond("I'm going offline... 😔")
         await bot.change_presence(status = discord.Status.offline)
 
 #Change Bot's Playing Activity Command
-@bot.command(name='playing', brief=' Change the game that the bot is playing')
-@commands.has_permissions(administrator = True)
-async def playing(ctx, *, text: str):
+@bot.slash_command(name='playing', description='Change the game that the bot is playing')
+@commands.has_permissions(administrator=True)
+async def playing(ctx: discord.ApplicationContext, *, text: str):
     bot_game = text
     await bot.change_presence(activity = discord.Game(name = bot_game))
-    async with ctx.typing():
-        await asyncio.sleep(0.5)
-        await ctx.send(f"Now I'm playing {bot_game}")
+    await ctx.respond(f"Now I'm playing {bot_game}")
 
 #Announcement Command
-@bot.command(name='announcement', brief=' Make an announcement in an embed message')
-async def announce(ctx):
-    await ctx.send('Answer The Following Questions (20 mins left)')
+@bot.slash_command(name='announcement', description='Make an announcement in an embed message')
+async def announce(ctx: discord.ApplicationContext):
+    await ctx.respond('Answer The Following Questions (20 mins left)')
 
     questions = ["Type Title: ", "Type Short Description: ", "Type Field Title: ", "Type Field Description: ", "Mention The Channel: "]
     replies = []
@@ -125,18 +115,19 @@ async def announce(ctx):
     field_desc = replies[3]
 
     channel_id = int(replies[4][2:-1])
-    channel = bot.get_channel(channel_id)      
+    channel = bot.get_channel(channel_id)
 
     announcement = discord.Embed(title = main_title, description = main_desc, colour = discord.Colour.random())
     announcement.add_field(name = field_title, value = field_desc, inline = False)
     announcement.set_thumbnail(url = ctx.guild.icon)
 
     await channel.send(embed = announcement)
+    await ctx.respond("Done! Go check your announcement!")
 
 #Give verified role to a member/verify a member command
-@bot.command(name='verify', brief=' Make a member verified')
+@bot.slash_command(name='verify', description='Make a member verified')
 @commands.has_permissions(manage_roles=True)
-async def verify(ctx, member: discord.Member):
+async def verify(ctx: discord.ApplicationContext, member: discord.Member):
     role = discord.utils.get(ctx.guild.roles, name = 'Verified')
     server = ctx.guild.roles
     if role in member.roles:
@@ -151,52 +142,49 @@ async def verify(ctx, member: discord.Member):
         msg = f"Member {member.mention} has been verified!"
     async with ctx.typing():
         await asyncio.sleep(0.5)
-        await ctx.send(msg)
+        await ctx.respond(msg)
 
 #Say command
-@bot.command(name='say', brief=' Make Sofie say anything!')
-async def say(ctx, *, text):
-    await ctx.message.delete()
+@bot.slash_command(name='say', description='Make Sofie say anything!')
+async def say(ctx: discord.ApplicationContext, *, text):
     async with ctx.typing():
-        await asyncio.sleep(2)
-        await ctx.send(text)
+        await asyncio.sleep(0.5)
+        await ctx.respond(text)
 
 #Server stats command
-@bot.command(name='serverstats', brief=' Shows server statistics')
-async def serverstats(ctx):
+@bot.slash_command(name='serverstats', description='Shows server statistics')
+async def serverstats(ctx: discord.ApplicationContext):
     stats_embed = discord.Embed(title="Server Statistics", colour=discord.Colour.random())
     stats_embed.add_field(name='Name:', value=ctx.guild.name, inline=False)
     stats_embed.add_field(name='Owner:', value=ctx.guild.owner, inline=False)
     stats_embed.add_field(name='Server Created Date:', value=ctx.guild.created_at, inline=False)
     stats_embed.add_field(name='Member Count:', value=ctx.guild.member_count, inline=False)
     stats_embed.set_thumbnail(url=ctx.guild.icon)
-    async with ctx.typing():
-        await asyncio.sleep(1)
-        await ctx.send(embed=stats_embed)
+    await ctx.respond(embed = stats_embed)
     
 #Dice roll command
-@bot.command(name='dice', brief=' Roll a dice')
-async def dice(ctx):
+@bot.slash_command(name='dice', description='Roll a dice')
+async def dice(ctx: discord.ApplicationContext):
     dice_numbers = ["1", "2", "3", "4", "5", "6"]
     author = ctx.author
     roll = random.choice(dice_numbers)
     async with ctx.typing():
         await asyncio.sleep(0.5)
-        await ctx.send(f"{author} rolled a {roll}")
+        await ctx.respond(f"{author} rolled a {roll}")
 
 #User avatar command
-@bot.command(name='useravatar', brief=" Get a member's avatar or your own", description='(Mentioning a member is optional)')
-async def useravatar(ctx, *, member: discord.Member=None):
+@bot.slash_command(name='useravatar', description="Get a member's avatar or your own")
+async def useravatar(ctx: discord.ApplicationContext, *, member: discord.Member=None):
     member = ctx.author if not member else member
     avatar_embed = discord.Embed(title=member.name)
     avatar_embed.set_image(url=member.avatar)
     async with ctx.typing():
         await asyncio.sleep(0.5)
-        await ctx.send(embed = avatar_embed)
+        await ctx.respond(embed = avatar_embed)
 
-#User info command (Soon)
-@bot.command(name='userinfo', brief=' Get information of a member or your own', description='(Mentioning a member is optional)')
-async def userinfo(ctx, *, member: discord.Member=None):
+#User info command
+@bot.slash_command(name='userinfo', description='Get user information')
+async def userinfo(ctx: discord.ApplicationContext, *, member: discord.Member=None):
     if not member:
         member = ctx.author
     info_embed = discord.Embed(title='User Information', colour=discord.Colour.random())
@@ -208,61 +196,61 @@ async def userinfo(ctx, *, member: discord.Member=None):
     info_embed.add_field(name='Joined Server Date:', value=member.joined_at, inline=False)
     async with ctx.typing():
         await asyncio.sleep(3)
-        await ctx.send(embed = info_embed)
+        await ctx.respond(embed = info_embed)
 
-#Purge command (Admin)
-@bot.command(name='purge', brief=' Delete messages in a channel')
+#Purge command
+@bot.slash_command(name='purge', description='Delete messages in a channel')
 @commands.has_permissions(manage_channels=True)
-async def purge(ctx, amount: int):
+async def purge(ctx: discord.ApplicationContext, amount: int):
     await ctx.channel.purge(limit=amount)
     feedback = await ctx.send(f"Deleted {amount} messages sucessfully!")
     await asyncio.sleep(3)
     await feedback.delete()
 
-#Kick command (Admin)
-@bot.command(name='kick', brief=' Kick a member')
+#Kick command
+@bot.slash_command(name='kick', description='Kick a member')
 @commands.has_permissions(kick_members=True)
-async def kick(ctx, member: discord.Member, *, reason: str):
+async def kick(ctx: discord.ApplicationContext, member: discord.Member, *, reason: str):
     await member.kick(reason = reason)
-    await ctx.send(f"{member} got kicked! Reason: {reason}")
+    await ctx.respond(f"{member} got kicked! Reason: {reason}")
 
-#Ban command (Admin)
-@bot.command(name='ban', brief=' Ban a member')
+#Ban command
+@bot.slash_command(name='ban', description='Ban a member')
 @commands.has_permissions(ban_members=True)
-async def ban(ctx, member: discord.Member, *, reason: str):
+async def ban(ctx: discord.ApplicationContext, member: discord.Member, *, reason: str):
     await member.ban(reason=reason)
-    await ctx.send(f"{member} has been banned! Reason: {reason}")
+    await ctx.respond(f"{member} has been banned! Reason: {reason}")
 
 #Change nickname command
-@bot.command(name='nickname', brief=" Change nickname of a member")
+@bot.slash_command(name='nickname', description="Change nickname of a member")
 @commands.has_permissions(administrator=True)
-async def nickname(ctx, member: discord.Member, *, name):
+async def nickname(ctx: discord.ApplicationContext, member: discord.Member, *, name):
     await member.edit(nick=name)
     async with ctx.typing():
         await asyncio.sleep(1)
-        await ctx.send(f"Nickname of {member.mention} was changed to {name}")
+        await ctx.respond(f"Nickname of {member.mention} was changed to {name}")
 
 #Add role command
-@bot.command(name='addrole', brief=' Give a role to a member')
+@bot.slash_command(name='addrole', description='Give a role to a member')
 @commands.has_permissions(administrator=True)
-async def giverole(ctx, member: discord.Member, *, role: discord.Role):
+async def giverole(ctx: discord.ApplicationContext, member: discord.Member, *, role: discord.Role):
     await member.add_roles(role)
     async with ctx.typing():
         await asyncio.sleep(1)
-        await ctx.send(f"Added the role {role.mention} to {member.mention}!")
+        await ctx.respond(f"Added the role {role.mention} to {member.mention}!")
 
 #Delete role command
-@bot.command(name='delrole', brief=' Remove a role from a member')
+@bot.slash_command(name='delrole', description='Remove a role from a member')
 @commands.has_permissions(administrator=True)
-async def removerole(ctx, member: discord.Member, *, role: discord.Role):
+async def removerole(ctx: discord.ApplicationContext, member: discord.Member, *, role: discord.Role):
     await member.remove_roles(role)
     async with ctx.typing():
         await asyncio.sleep(1)
-        await ctx.send(f"Removed the role {role.mention} from {member.mention}")
+        await ctx.respond(f"Removed the role {role.mention} from {member.mention}")
 
 #Punch command
-@bot.command(name='punch', brief=' Punch someone')
-async def punch(ctx, member: discord.Member):
+@bot.slash_command(name='punch', description=' Punch someone')
+async def punch(ctx: discord.ApplicationContext, member: discord.Member):
     gif = [
         "https://media.tenor.com/DKMb2QPU7aYAAAAd/rin243109-blue-exorcist.gif",
         "https://media.tenor.com/tNkqMLg8l1AAAAAd/taiga.gif",
@@ -274,11 +262,11 @@ async def punch(ctx, member: discord.Member):
     author = ctx.author
     punch_embed = discord.Embed(description=f'{author.name} punches {member.mention} 😡', colour=discord.Colour.random())
     punch_embed.set_thumbnail(url = random_punch)
-    await ctx.send(embed = punch_embed)
+    await ctx.respond(embed = punch_embed)
 
 #Stare command
-@bot.command(name='stare', brief=' Stare at someone')
-async def stare(ctx, member: discord.Member):
+@bot.slash_command(name='stare', description='Stare at someone')
+async def stare(ctx: discord.ApplicationContext, member: discord.Member):
     gif = [
         "https://media.tenor.com/IwyNIipPItQAAAAd/anime-naruto.gif",
         "https://media.tenor.com/-htQlAzVwKcAAAAd/anime-blinking.gif",
@@ -292,11 +280,11 @@ async def stare(ctx, member: discord.Member):
     author = ctx.author
     stare_embed = discord.Embed(description=f'{author.name} stares at {member.mention} 😬', colour=discord.Colour.random())
     stare_embed.set_thumbnail(url = random_stare)
-    await ctx.send(embed = stare_embed)
+    await ctx.respond(embed = stare_embed)
 
 #Hug command
-@bot.command(name='hug', brief=' Hug someone')
-async def hug(ctx, member: discord.Member):
+@bot.slash_command(name='hug', description='Hug someone')
+async def hug(ctx: discord.ApplicationContext, member: discord.Member):
     gif = [
         "https://media.tenor.com/G_IvONY8EFgAAAAd/aharen-san-anime-hug.gif",
         "https://media.tenor.com/HYkaTQBybO4AAAAd/hug-anime.gif",
@@ -310,11 +298,11 @@ async def hug(ctx, member: discord.Member):
     author = ctx.author
     hug_embed = discord.Embed(description=f'{author.name} hugs {member.mention} 💖', colour=discord.Colour.random())
     hug_embed.set_thumbnail(url = random_hug)
-    await ctx.send(embed = hug_embed)
+    await ctx.respond(embed = hug_embed)
 
 #Slap command
-@bot.command(name='slap', brief=' Slap someone')
-async def slap(ctx, member: discord.Member):
+@bot.slash_command(name='slap', description='Slap someone')
+async def slap(ctx: discord.ApplicationContext, member: discord.Member):
     gif = [
         "https://media.tenor.com/XiYuU9h44-AAAAAd/anime-slap-mad.gif",
         "https://media.tenor.com/eU5H6GbVjrcAAAAd/slap-jjk.gif",
@@ -326,11 +314,11 @@ async def slap(ctx, member: discord.Member):
     author = ctx.author
     slap_embed = discord.Embed(description=f'{author.name} slaps {member.mention} 😱', colour=discord.Colour.random())
     slap_embed.set_thumbnail(url = random_slap)
-    await ctx.send(embed = slap_embed)
+    await ctx.respond(embed = slap_embed)
 
 #Kiss command
-@bot.command(name='kiss', brief=' Kiss someone')
-async def kiss(ctx, member: discord.Member):
+@bot.slash_command(name='kiss', description='Kiss someone')
+async def kiss(ctx: discord.ApplicationContext, member: discord.Member):
     gif = [
         "https://media.tenor.com/jnndDmOm5wMAAAAd/kiss.gif",
         "https://media.tenor.com/YHxJ9NvLYKsAAAAd/anime-kiss.gif",
@@ -346,7 +334,7 @@ async def kiss(ctx, member: discord.Member):
     author = ctx.author
     kiss_embed = discord.Embed(description=f'{author.name} is kissing {member.mention} 💋', colour=discord.Colour.random())
     kiss_embed.set_thumbnail(url = random_kiss)
-    await ctx.send(embed = kiss_embed)
+    await ctx.respond(embed = kiss_embed)
 
 #Running the bot
 load_dotenv
