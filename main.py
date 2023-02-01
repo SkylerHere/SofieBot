@@ -3,7 +3,6 @@ import discord
 import os
 import asyncio
 import random
-from discord.ext import commands
 from dotenv import load_dotenv
 intents = discord.Intents.all()
 intents.members=True
@@ -54,95 +53,102 @@ async def on_message(msg):
 #Patch Notes Command
 @bot.slash_command(name='patchnotes', description='Details about the latest updates of SofieBot')
 async def self(ctx: discord.ApplicationContext):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.7', colour=discord.Colour.random())
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.8', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name="Slash Commands", value='Added slash commands. Removed prefix legacy commands', inline=False)
+    patchnotes_embed.add_field(name="Major Code Changes", value='Almost refactored the whole code to work with slash commands properly', inline=False)
     await ctx.respond(embed = patchnotes_embed)
 
 #Change Bot's Status Command
 @bot.slash_command(name='status', description='Change the current status of the bot')
-@commands.has_permissions(administrator=True)
 async def status(ctx: discord.ApplicationContext, status_text: str):
-    if status_text == 'Online' or status_text == 'online':
-        await bot.change_presence(status = discord.Status.online)
-        await ctx.respond("I'm online! 🟢")
+    if ctx.author.guild_permissions.administrator:
+        if status_text == 'Online' or status_text == 'online':
+            await bot.change_presence(status = discord.Status.online)
+            await ctx.respond("I'm online! 🟢")
     
-    elif status_text == 'Idle' or status_text == 'idle':
-        await bot.change_presence(status = discord.Status.idle)
-        await ctx.respond("I'm idle! 🌙")
+        elif status_text == 'Idle' or status_text == 'idle':
+            await bot.change_presence(status = discord.Status.idle)
+            await ctx.respond("I'm idle! 🌙")
 
-    elif status_text == 'Disturb' or status_text == 'disturb':
-        await bot.change_presence(status = discord.Status.do_not_disturb)
-        await ctx.respond("Do not disturb! ⛔")
+        elif status_text == 'Disturb' or status_text == 'disturb':
+            await bot.change_presence(status = discord.Status.do_not_disturb)
+            await ctx.respond("Do not disturb! ⛔")
 
-    elif status_text == 'Offline' or status_text == 'offline':
-        await ctx.respond("I'm going offline... 😔")
-        await bot.change_presence(status = discord.Status.offline)
+        elif status_text == 'Offline' or status_text == 'offline':
+            await ctx.respond("I'm going offline... 😔")
+            await bot.change_presence(status = discord.Status.offline)
+    else:
+        await ctx.respond("You don't have the right permissions for this command!")
 
 #Change Bot's Playing Activity Command
 @bot.slash_command(name='playing', description='Change the game that the bot is playing')
-@commands.has_permissions(administrator=True)
 async def playing(ctx: discord.ApplicationContext, *, text: str):
-    bot_game = text
-    await bot.change_presence(activity = discord.Game(name = bot_game))
-    await ctx.respond(f"Now I'm playing {bot_game}")
+    if ctx.author.guild_permissions.administrator:
+        bot_game = text
+        await bot.change_presence(activity = discord.Game(name = bot_game))
+        await ctx.respond(f"Now I'm playing {bot_game}")
 
 #Announcement Command
 @bot.slash_command(name='announcement', description='Make an announcement in an embed message')
 async def announce(ctx: discord.ApplicationContext):
-    await ctx.respond('Answer The Following Questions (20 mins left)')
+    if ctx.author.guild_permissions.administrator:
+        await ctx.respond('Answer The Following Questions (20 mins left)')
 
-    questions = ["Type Title: ", "Type Short Description: ", "Type Field Title: ", "Type Field Description: ", "Mention The Channel: "]
-    replies = []
+        questions = ["Announcement Title: ", "Announcement Short Description: ", "Field Title: ", "Field Description: ", "Mention The Channel: "]
+        replies = []
 
-    def check(user):
-        return user.author == ctx.author and user.channel == ctx.channel
+        def check(user):
+            return user.author == ctx.author and user.channel == ctx.channel
 
-    for question in questions:
-        await ctx.send(question)
+        for question in questions:
+            await ctx.send(question)
 
-        try:
-            msg = await bot.wait_for('message', timeout=1200, check=check)
-        except asyncio.TimeoutError:
-            await ctx.send("Ran out of time for the announcement command. Try again!")
-            return
-        else:
-            replies.append(msg.content)
+            try:
+                msg = await bot.wait_for('message', timeout=1200, check=check)
+            except asyncio.TimeoutError:
+                await ctx.send("Ran out of time for the announcement command. Try again!")
+                return
+            else:
+                replies.append(msg.content)
 
-    main_title = replies[0]
-    main_desc = replies[1]
-    field_title = replies[2]
-    field_desc = replies[3]
+        main_title = replies[0]
+        main_desc = replies[1]
+        field_title = replies[2]
+        field_desc = replies[3]
 
-    channel_id = int(replies[4][2:-1])
-    channel = bot.get_channel(channel_id)
+        channel_id = int(replies[4][2:-1])
+        channel = bot.get_channel(channel_id)
 
-    announcement = discord.Embed(title = main_title, description = main_desc, colour = discord.Colour.random())
-    announcement.add_field(name = field_title, value = field_desc, inline = False)
-    announcement.set_thumbnail(url = ctx.guild.icon)
+        announcement = discord.Embed(title = main_title, description = main_desc, colour = discord.Colour.random())
+        announcement.add_field(name = field_title, value = field_desc, inline = False)
+        announcement.set_thumbnail(url = ctx.guild.icon)
 
-    await channel.send(embed = announcement)
-    await ctx.respond("Done! Go check your announcement!")
+        await channel.send(embed = announcement)
+        await ctx.respond("Done! Go check your announcement!")
+    else:
+        await ctx.respond("You don't have the right permissions for this command!")
 
 #Give verified role to a member/verify a member command
 @bot.slash_command(name='verify', description='Make a member verified')
-@commands.has_permissions(manage_roles=True)
 async def verify(ctx: discord.ApplicationContext, member: discord.Member):
-    role = discord.utils.get(ctx.guild.roles, name = 'Verified')
-    server = ctx.guild.roles
-    if role in member.roles:
-        msg = f"Member {member.mention} is already verified..."
-    elif role not in member.roles and role in server:
-        await member.add_roles(role)
-        msg = f"Member {member.mention} has been verified!"
-    elif role not in member.roles and role not in server:
-        await ctx.guild.create_role(name = 'Verified', color = discord.Colour(0x2ecc71))
-        created_role = discord.utils.get(ctx.guild.roles, name = 'Verified')
-        await member.add_roles(created_role)
-        msg = f"Member {member.mention} has been verified!"
-    async with ctx.typing():
-        await asyncio.sleep(0.5)
-        await ctx.respond(msg)
+    if ctx.author.guild_permissions.manage_roles:
+        role = discord.utils.get(ctx.guild.roles, name = 'Verified')
+        server = ctx.guild.roles
+        if role in member.roles:
+            msg = f"Member {member.mention} is already verified..."
+        elif role not in member.roles and role in server:
+            await member.add_roles(role)
+            msg = f"Member {member.mention} has been verified!"
+        elif role not in member.roles and role not in server:
+            await ctx.guild.create_role(name = 'Verified', color = discord.Colour(0x2ecc71))
+            created_role = discord.utils.get(ctx.guild.roles, name = 'Verified')
+            await member.add_roles(created_role)
+            msg = f"Member {member.mention} has been verified!"
+        async with ctx.typing():
+            await asyncio.sleep(0.5)
+            await ctx.respond(msg)
+    else:
+        await ctx.respond("You don't have the right permissions for this command!")
 
 #Say command
 @bot.slash_command(name='say', description='Make Sofie say anything!')
@@ -200,53 +206,65 @@ async def userinfo(ctx: discord.ApplicationContext, *, member: discord.Member=No
 
 #Purge command
 @bot.slash_command(name='purge', description='Delete messages in a channel')
-@commands.has_permissions(manage_channels=True)
 async def purge(ctx: discord.ApplicationContext, amount: int):
-    await ctx.channel.purge(limit=amount)
-    feedback = await ctx.send(f"Deleted {amount} messages sucessfully!")
-    await asyncio.sleep(3)
-    await feedback.delete()
+    if ctx.author.guild_permissions.manage_messages:
+        await ctx.channel.purge(limit=amount)
+        feedback = await ctx.respond(f"Deleted {amount} messages sucessfully!")
+        await asyncio.sleep(3)
+        await feedback.delete()
+    else:
+        await ctx.respond("You don't have the right permissions for this command!")
 
 #Kick command
 @bot.slash_command(name='kick', description='Kick a member')
-@commands.has_permissions(kick_members=True)
 async def kick(ctx: discord.ApplicationContext, member: discord.Member, *, reason: str):
-    await member.kick(reason = reason)
-    await ctx.respond(f"{member} got kicked! Reason: {reason}")
+    if ctx.author.guild_permissions.kick_members:
+        await member.kick(reason = reason)
+        await ctx.respond(f"{member} got kicked! Reason: {reason}")
+    else:
+        await ctx.respond("You don't have the right permissions for this command!")
 
 #Ban command
 @bot.slash_command(name='ban', description='Ban a member')
-@commands.has_permissions(ban_members=True)
 async def ban(ctx: discord.ApplicationContext, member: discord.Member, *, reason: str):
-    await member.ban(reason=reason)
-    await ctx.respond(f"{member} has been banned! Reason: {reason}")
+    if ctx.author.guild_permissions.ban_members:
+        await member.ban(reason=reason)
+        await ctx.respond(f"{member} has been banned! Reason: {reason}")
+    else:
+        await ctx.respond("You don't have the right permissions for this command!")
 
 #Change nickname command
 @bot.slash_command(name='nickname', description="Change nickname of a member")
-@commands.has_permissions(administrator=True)
 async def nickname(ctx: discord.ApplicationContext, member: discord.Member, *, name):
-    await member.edit(nick=name)
-    async with ctx.typing():
-        await asyncio.sleep(1)
-        await ctx.respond(f"Nickname of {member.mention} was changed to {name}")
+    if ctx.author.guild_permissions.manage_nicknames:
+        await member.edit(nick=name)
+        async with ctx.typing():
+            await asyncio.sleep(1)
+            await ctx.respond(f"Nickname of {member.mention} was changed to {name}")
+    else:
+        await ctx.respond("You don't have the right permissions for this command!")
 
 #Add role command
 @bot.slash_command(name='addrole', description='Give a role to a member')
-@commands.has_permissions(administrator=True)
 async def giverole(ctx: discord.ApplicationContext, member: discord.Member, *, role: discord.Role):
-    await member.add_roles(role)
-    async with ctx.typing():
-        await asyncio.sleep(1)
-        await ctx.respond(f"Added the role {role.mention} to {member.mention}!")
+    if ctx.author.guild_permissions.manage_roles:
+        await member.add_roles(role)
+        async with ctx.typing():
+            await asyncio.sleep(1)
+            await ctx.respond(f"Added the role {role.mention} to {member.mention}!")
+    else:
+        await ctx.respond("You don't have the right permissions for this command!")
 
 #Delete role command
 @bot.slash_command(name='delrole', description='Remove a role from a member')
-@commands.has_permissions(administrator=True)
 async def removerole(ctx: discord.ApplicationContext, member: discord.Member, *, role: discord.Role):
-    await member.remove_roles(role)
-    async with ctx.typing():
-        await asyncio.sleep(1)
-        await ctx.respond(f"Removed the role {role.mention} from {member.mention}")
+    if ctx.author.guild_permissions.manage_roles:
+        await member.remove_roles(role)
+        async with ctx.typing():
+            await asyncio.sleep(1)
+            await ctx.respond(f"Removed the role {role.mention} from {member.mention}")
+    else:
+        await ctx.respond("You don't have the right permissions for this command!")
 
 #Punch command
 @bot.slash_command(name='punch', description=' Punch someone')
