@@ -58,9 +58,9 @@ async def on_message(msg):
 #Patch Notes Command
 @bot.slash_command(name='patchnotes', description='Details about the latest updates of SofieBot')
 async def self(ctx: discord.ApplicationContext):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.8+', colour=discord.Colour.random())
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.9', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name="Minor Code Changes", value='Correcting typos and stuff', inline=False)
+    patchnotes_embed.add_field(name="New Reactions", value='Added More Reactions to messages', inline=False)
     await ctx.respond(embed = patchnotes_embed)
 
 #Change Bot's Status Command
