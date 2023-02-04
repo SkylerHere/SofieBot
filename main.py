@@ -56,7 +56,7 @@ async def on_message(msg):
         await msg.add_reaction('🤣')
 
 #Patch Notes Command
-@bot.slash_command(name='patchnotes', description='Details about the latest SofieBot Updates')
+@bot.slash_command(name='patchnotes', description='Details about the latest SofieBot updates')
 async def self(ctx: discord.ApplicationContext):
     patchnotes_embed = discord.Embed(title='Patch Notes 1.1.9', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
