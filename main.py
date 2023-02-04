@@ -42,7 +42,7 @@ async def on_message(msg):
     if 'snowman' in msg.content or 'Olaf' in msg.content:
         await msg.add_reaction('⛄')
 
-    if 'my birthday' in msg.content or 'birthday':
+    if 'my birthday' in msg.content or 'birthday' in msg.content:
         await msg.add_reaction('🎉')
         await msg.add_reaction('🎂')
 
