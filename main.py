@@ -42,19 +42,25 @@ async def on_message(msg):
     if 'snowman' in msg.content or 'Olaf' in msg.content:
         await msg.add_reaction('⛄')
 
-    if 'my birthday' in msg.content:
+    if 'my birthday' in msg.content or 'birthday':
         await msg.add_reaction('🎉')
         await msg.add_reaction('🎂')
 
     if 'Hello' in msg.content or 'Hi' in msg.content:
         await msg.add_reaction('👋')
+    
+    if 'lol' in msg.content or 'LOL' in msg.content:
+        await msg.add_reaction('😂')
+
+    if 'xd' in msg.content or 'xD' in msg.content:
+        await msg.add_reaction('🤣')
 
 #Patch Notes Command
 @bot.slash_command(name='patchnotes', description='Details about the latest updates of SofieBot')
 async def self(ctx: discord.ApplicationContext):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.8+', colour=discord.Colour.random())
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.9', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name="Minor Code Changes", value='Correcting typos and stuff', inline=False)
+    patchnotes_embed.add_field(name="New Reactions", value='Added More Reactions to messages', inline=False)
     await ctx.respond(embed = patchnotes_embed)
 
 #Change Bot's Status Command
