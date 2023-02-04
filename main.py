@@ -42,12 +42,18 @@ async def on_message(msg):
     if 'snowman' in msg.content or 'Olaf' in msg.content:
         await msg.add_reaction('⛄')
 
-    if 'my birthday' in msg.content:
+    if 'my birthday' in msg.content or 'birthday':
         await msg.add_reaction('🎉')
         await msg.add_reaction('🎂')
 
     if 'Hello' in msg.content or 'Hi' in msg.content:
         await msg.add_reaction('👋')
+    
+    if 'lol' in msg.content or 'LOL' in msg.content:
+        await msg.add_reaction('😂')
+
+    if 'xd' in msg.content or 'xD' in msg.content:
+        await msg.add_reaction('🤣')
 
 #Patch Notes Command
 @bot.slash_command(name='patchnotes', description='Details about the latest updates of SofieBot')
