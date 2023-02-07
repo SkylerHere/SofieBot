@@ -57,4 +57,8 @@ py -m pip install py-cord
 <h3>Both highlighted lines should be as shown below</h3>
 <img src="https://user-images.githubusercontent.com/102334395/217139550-db7bb2c0-c963-4288-add4-1709260a3a14.png" width="900 height="100">
 
+<h3>Click on the Secrets tool, name the secret as TOKEN, and in the value label paste your bot token, and then click on Add new secret</h3>
+<img src="https://user-images.githubusercontent.com/102334395/217140678-25e8afc4-9f3f-48d7-b13f-3f91a2a7076f.png" width="900 height="100">
+
+
 <h3>Now you can the run the Bot on Replit 😎</h3>
