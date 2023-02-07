@@ -26,7 +26,8 @@ pip install py-cord
 py -m pip install py-cord
 ```
 
-<h2>2️⃣ If you run/host the Bot on Replit</h2>
+<h2>2️⃣ If you run/host the Bot on Replit</h2> 
+<h3 align="center">⚠Click on the pics for better quality⚠</h3>
 
 <h3>Click on the cross as the picture shows</h3>
 <img src="https://user-images.githubusercontent.com/102334395/217135206-ed08a369-c1d2-4e85-9f78-0bd06326ce56.png" width="900 height="100">
