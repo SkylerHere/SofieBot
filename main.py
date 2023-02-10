@@ -58,10 +58,16 @@ async def on_message(msg):
 #Patch Notes Command
 @bot.slash_command(name='patchnotes', description='Details about the latest SofieBot updates')
 async def self(ctx: discord.ApplicationContext):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.1.9', colour=discord.Colour.random())
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.2.0', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name="New Reactions", value='Added More Reactions to messages', inline=False)
+    patchnotes_embed.add_field(name="Vote Command", value='Now you can vote for Sofie on top.gg with a command', inline=False)
+    patchnotes_embed.add_field(name="Yell Command", value='New interaction command. Now you can yell at someone', inline=False)
     await ctx.respond(embed = patchnotes_embed)
+
+#Vote Command
+@bot.slash_command(name='vote', description='Vote for Sofie on top.gg')
+async def vote(ctx: discord.ApplicationContext):
+    await ctx.respond('https://top.gg/bot/1053315848980410369/vote')
 
 #Change Bot's Status Command
 @bot.slash_command(name='status', description='Change the current status of the bot')
@@ -358,6 +364,24 @@ async def kiss(ctx: discord.ApplicationContext, member: discord.Member):
     kiss_embed = discord.Embed(description=f'{author.name} is kissing {member.mention} 💋', colour=discord.Colour.random())
     kiss_embed.set_thumbnail(url = random_kiss)
     await ctx.respond(embed = kiss_embed)
+
+#Yell command
+@bot.slash_command(name='yell', description='Yell at someone')
+async def yell(ctx: discord.ApplicationContext, member: discord.Member):
+    gif = [
+        "https://media.tenor.com/Pz9fOE6TujoAAAAd/miko-anime.gif",
+        "https://media.tenor.com/X0PhsWs3DYsAAAAd/angry-mad-max.gif",
+        "https://media.tenor.com/SVuIVt9pKa8AAAAd/kaguya-sama-love-is-war-anime.gif",
+        "https://media.tenor.com/cc7R8hUdw2sAAAAd/chika-love-is-war.gif",
+        "https://media.tenor.com/t9z9hjjRu3sAAAAd/marin-kitagawa.gif",
+        "https://media.tenor.com/4tslZb_XFuoAAAAd/nonon-jakuzure-jakuzure.gif",
+        "https://media.tenor.com/zIkh-MKfnW0AAAAd/anime-scream.gif"
+    ]
+    random_yell = random.choice(gif)
+    author = ctx.author
+    yell_embed = discord.Embed(description=f'{author.name} is yelling at {member.mention} 😶', colour=discord.Colour.random())
+    yell_embed.set_thumbnail(url = random_yell)
+    await ctx.respond(embed = yell_embed)
 
 #Running the bot
 load_dotenv
