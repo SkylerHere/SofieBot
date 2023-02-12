@@ -17,7 +17,7 @@ bot = discord.Bot(intents=intents)
 #Adding Bot Activity
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(name="League Of Legends"))
+    await bot.change_presence(activity=discord.Game(name="Fallout 4"))
     print("Bot {0.user} is running...".format(bot))
 
 #Add message reactions
@@ -59,10 +59,11 @@ async def on_message(msg):
 #Patch Notes Command
 @bot.slash_command(name='patchnotes', description='Details about the latest SofieBot updates')
 async def self(ctx: discord.ApplicationContext):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.2.0', colour=discord.Colour.random())
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.2.1', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name="Vote Command", value='Now you can vote for Sofie on top.gg with a command', inline=False)
-    patchnotes_embed.add_field(name="Yell Command", value='New interaction command. Now you can yell at someone', inline=False)
+    patchnotes_embed.add_field(name="Fixed userinfo bug", value='Fixed a bug where the userinfo command would not work without mentioning someone', inline=False)
+    patchnotes_embed.add_field(name="Pat command", value='Added a pat interaction command', inline=False)
+    patchnotes_embed.add_field(name="Changed playing status", value='Changed playing status to Fallout 4', inline=False)
     await ctx.respond(embed = patchnotes_embed)
 
 #Vote Command
@@ -196,14 +197,12 @@ async def useravatar(ctx: discord.ApplicationContext, *, member: discord.Member=
     member = ctx.author if not member else member
     avatar_embed = discord.Embed(title=member.name)
     avatar_embed.set_image(url=member.avatar)
-    async with ctx.typing():
-        await asyncio.sleep(0.5)
-        await ctx.respond(embed = avatar_embed)
+    await ctx.respond(embed = avatar_embed)
 
 #User info command
 @bot.slash_command(name='userinfo', description='Get user information')
 async def userinfo(ctx: discord.ApplicationContext, *, member: discord.Member=None):
-    if not member:
+    if member is None:
         member = ctx.author
     info_embed = discord.Embed(title='User Information', colour=discord.Colour.random())
     info_embed.set_thumbnail(url=member.avatar)
@@ -212,9 +211,7 @@ async def userinfo(ctx: discord.ApplicationContext, *, member: discord.Member=No
     info_embed.add_field(name='ID:', value=member.id, inline=False)
     info_embed.add_field(name='Account Created Date:', value=member.created_at, inline=False)
     info_embed.add_field(name='Joined Server Date:', value=member.joined_at, inline=False)
-    async with ctx.typing():
-        await asyncio.sleep(3)
-        await ctx.respond(embed = info_embed)
+    await ctx.respond(embed = info_embed)
 
 #Purge command
 @bot.slash_command(name='purge', description='Delete messages in a channel')
@@ -293,6 +290,24 @@ async def punch(ctx: discord.ApplicationContext, member: discord.Member):
     punch_embed = discord.Embed(description=f'{author.name} punches {member.mention} 😡', colour=discord.Colour.random())
     punch_embed.set_thumbnail(url = random_punch)
     await ctx.respond(embed = punch_embed)
+
+#Pat command
+@bot.slash_command(name='pat', description='Pat someone')
+async def pat(ctx: discord.ApplicationContext, member: discord.Member):
+    gif = [
+        "https://media.tenor.com/7xrOS-GaGAIAAAAd/anime-pat-anime.gif",
+        "https://media.tenor.com/OvrmH29V-44AAAAd/pat.gif",
+        "https://media.tenor.com/oGbO8vW_eqgAAAAd/spy-x-family-anya.gif",
+        "https://media.tenor.com/8DaE6qzF0DwAAAAd/neet-anime.gif",
+        "https://media.tenor.com/fOqJrM0oieEAAAAd/pat.gif",
+        "https://media.tenor.com/0gCy2NYphkYAAAAd/anime-pat.gif",
+        "https://media.tenor.com/XN3UKIE83MMAAAAd/pat-on-the-back.gif"
+    ]
+    random_pat = random.choice(gif)
+    author = ctx.author
+    pat_embed = discord.Embed(description=f'{author.name}  pats {member.mention}  😁', colour=discord.Colour.random())
+    pat_embed.set_thumbnail(url = random_pat)
+    await ctx.respond(embed = pat_embed)
 
 #Stare command
 @bot.slash_command(name='stare', description='Stare at someone')
