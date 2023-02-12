@@ -62,4 +62,4 @@ py -m pip install py-cord
 <img src="https://user-images.githubusercontent.com/102334395/217140678-25e8afc4-9f3f-48d7-b13f-3f91a2a7076f.png" width="900 height="100">
 
 
-<h3>Now you can the run the Bot on Replit 😎</h3>
+<h3 align="center">Now you can the run the Bot on Replit 😎</h3>
