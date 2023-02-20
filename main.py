@@ -59,11 +59,9 @@ async def on_message(msg):
 #Patch Notes Command
 @bot.slash_command(name='patchnotes', description='Details about the latest SofieBot updates')
 async def self(ctx: discord.ApplicationContext):
-    patchnotes_embed = discord.Embed(title='Patch Notes 1.2.1', colour=discord.Colour.random())
+    patchnotes_embed = discord.Embed(title='Patch Notes 1.2.2', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name="Fixed userinfo bug", value='Fixed a bug where the userinfo command would not work without mentioning someone', inline=False)
-    patchnotes_embed.add_field(name="Pat command", value='Added a pat interaction command', inline=False)
-    patchnotes_embed.add_field(name="Changed playing status", value='Changed playing status to Fallout 4', inline=False)
+    patchnotes_embed.add_field(name="Announcement Command Timeout", value='Time limit of announcement command has been decreased to 10 minutes', inline=False)
     await ctx.respond(embed = patchnotes_embed)
 
 #Vote Command
@@ -105,7 +103,7 @@ async def playing(ctx: discord.ApplicationContext, *, text: str):
 @bot.slash_command(name='announcement', description='Make an announcement in an embed message')
 async def announce(ctx: discord.ApplicationContext):
     if ctx.author.guild_permissions.administrator:
-        await ctx.respond('Answer The Following Questions (20 mins left)')
+        await ctx.respond('Answer The Following Questions (10 mins left)')
 
         questions = ["Announcement Title: ", "Announcement Short Description: ", "Field Title: ", "Field Description: ", "Mention The Channel: "]
         replies = []
@@ -117,7 +115,7 @@ async def announce(ctx: discord.ApplicationContext):
             await ctx.send(question)
 
             try:
-                msg = await bot.wait_for('message', timeout=1200, check=check)
+                msg = await bot.wait_for('message', timeout=600, check=check)
             except asyncio.TimeoutError:
                 await ctx.send("Ran out of time for the announcement command. Try again!")
                 return
