@@ -3,8 +3,6 @@ import discord
 import os
 import asyncio
 import random
-from discord import option
-from typing import Union
 from dotenv import load_dotenv
 intents = discord.Intents.all()
 intents.members=True
