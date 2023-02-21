@@ -61,6 +61,7 @@ async def on_message(msg):
 #Patch Notes Command
 @bot.slash_command(name='patchnotes', description='Details about the latest SofieBot updates')
 async def self(ctx: discord.ApplicationContext):
+
     patchnotes_embed = discord.Embed(title='Patch Notes 1.2.3', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
     patchnotes_embed.add_field(name="Permissions Update", value='Fixed permission requirements', inline=False)
@@ -97,7 +98,6 @@ async def rockpaper(ctx: discord.ApplicationContext, choice: str):
         msg = f"Sofie: ✂ | {author.name}: ✂. It's a tie!"
 
     await ctx.respond(msg)
-    
 
 #Vote Command
 @bot.slash_command(name='vote', description='Vote for Sofie on top.gg')
@@ -146,6 +146,7 @@ async def announce(ctx: discord.ApplicationContext):
 
     for question in questions:
         await ctx.send(question)
+
 
         try:
             msg = await bot.wait_for('message', timeout=600, check=check)
