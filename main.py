@@ -62,7 +62,7 @@ async def self(ctx: discord.ApplicationContext):
 
     patchnotes_embed = discord.Embed(title='Patch Notes 1.2.4', colour=discord.Colour.random())
     patchnotes_embed.set_thumbnail(url = 'https://i.ibb.co/fdkCK3Q/gz-KQ1l-Mn-KDPg-L2-Dj0-TTV-1-86w58.jpg')
-    patchnotes_embed.add_field(name="/rockpaper lowercase", value='Now you can type your choice on /rockpaper command with', inline=False)
+    patchnotes_embed.add_field(name="/rockpaper lowercase", value='Now you can type your choice on /rockpaper command with lowercase', inline=False)
     await ctx.respond(embed = patchnotes_embed)
 
 #Rock Paper Scissors Command
