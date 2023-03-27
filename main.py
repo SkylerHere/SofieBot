@@ -70,7 +70,7 @@ KISS_RESPONSE: Final[str] = "{0} is kissing {1} 💋"
 YELL_RESPONSE: Final[str] = "{0} is yelling at {1} 😶"
 EMOJIS: Final[List[str]] = ["☕", "🍕", "🥰", "❤", "🎄", "🎅", "❄", "⛄", "🎉", "🎂", "👋", "😂", "🤣"]
 
-GIFS: Final[Dict[List]] = {
+GIFS: Final[Dict[str, List[str]]] = {
     "punch": [
         "https://media.tenor.com/DKMb2QPU7aYAAAAd/rin243109-blue-exorcist.gif",
         "https://media.tenor.com/tNkqMLg8l1AAAAAd/taiga.gif",
