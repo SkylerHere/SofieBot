@@ -63,3 +63,38 @@ py -m pip install py-cord
 
 
 <h3 align="center">Now you can the run the Bot on Replit 😎</h3>
+
+<h2>3️⃣ Running the bot via terminal</h2>
+<h3>Open CMD anywhere you want</h3>
+<img src="https://i.ibb.co/mDdZ3qR/Screenshot-111.png" width="900 height="100">
+
+<h3>Go to the GitHub repo --> Code --> and copy this</h3>
+<img src="https://i.ibb.co/2P7kktj/Screenshot-112.png" width="900 height="100">
+
+<h3>Go back to your CMD and type:</h3>
+git clone https://github.com/SkylerHere/SofieBot.git
+<img src="https://i.ibb.co/WDw6P0w/Screenshot-113.png" width="900 height="100">
+
+<h3>Close this CMD, go to the created folder, and keep only these two files, delete the others</h3>
+<img src="https://i.ibb.co/vjpS0Y5/Screenshot-115.png" width="900 height="100">
+
+<h3>Create a .env file and put your bot's token there</h3>
+<img src="https://i.ibb.co/DCHGHCg/Screenshot-116.png" width="900 height="100">
+<img src="https://i.ibb.co/CQkxyyQ/Screenshot-117.png" width="900 height="100">
+
+<h3>Open CMD in this folder</h3>
+<img src="https://i.ibb.co/tCHMMVJ/Screenshot-118.png" width="900 height="100">
+
+<h3>Type: py -m pip install -r requirements.txt</h3>
+<img src="https://i.ibb.co/QfcFGKj/Screenshot-119.png" width="900 height="100">
+
+<h3>If you run into "No module named discord", type this: <i>py -m pip install py-cord</i>. Do the same for any other missing modules</h3>
+
+<h3>Now we are ready to run! Just type: py -m main.py</h3>
+<img src="https://i.ibb.co/V31YB3j/Screenshot-120.png" width="900 height="100">
+
+<h3>If the bot can't find the token try this alternative (Not safe. Do so on your own risk):</h3>
+<h4>In the main.py file type: <i>TOKEN = 'your bot token'</i></h4>
+<h4>And replace the <i>bot.run(os.getenv(TOKEN))</i> with <i>bot.run(TOKEN)</i></h4>
+
+<h3 align="center">Now you can run the bot through terminal</h3>
